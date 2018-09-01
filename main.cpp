@@ -4,6 +4,8 @@
 using namespace std;
 
 int main(){
+    
+    // abaixo está a criação de uns vetores e uns testes para os métodos implementados.
     Vector3 vetor1(7, 3, 5);
     Vector3 vetor2(-8, 4, 2);
     Vector3 vetor3(3, 0, -2);
@@ -63,8 +65,8 @@ int main(){
     cout << endl << "====================================================================" << endl;
     
     // há 3 maneiras de se gerar um produto vetorial entre 2 vetores:
-    // utilizarei o vetor9 e vetor 10 cujo produto vetorial é (2, -7, -6) para formar o vetor11 e vetor12 que devem ter o mesmo valor
-    // na terceira maneira irei modificar diretamente o vetor9 para ser o produto vetorial dele com o vetor10
+    // utilizarei o vetor9 e vetor 10 cujo produto vetorial é (2, -7, -6) para formar o vetor11 e vetor12 que devem ter o mesmo valor.
+    // na terceira maneira irei modificar diretamente o vetor9 para ser o produto vetorial dele com o vetor10.
     Vector3 vetor11 = vetor9.produtoVetorial(vetor10);
     Vector3 vetor12 = vetor9 % vetor10;
     
@@ -77,6 +79,32 @@ int main(){
     
     cout << "\nVetor 9 que foi modificado para ser o produto vetorial dele com o vetor 10: " << endl;
     vetor9.showVector();
+    
+    cout << "\nVetor UP: " << endl;
+    Vector3::UP.showVector();
+    
+    cout << "\nVetor DOWN: " << endl;
+    Vector3::DOWN.showVector();
+    
+    if (vetor1 != vetor2){
+        cout << "\nVetor 1 é diferente do vetor 2." << endl;
+    } else {
+        cout << "\nVetor 1 é igual ao vetor 2." << endl;
+    }
+    
+    Vector3 vetor13(3, 0, 1);
+    
+    if (vetor10 == vetor13){
+        cout << "\nVetor 10 é igual ao vetor 13." << endl;
+    } else {
+        cout << "\nVetor 10 é diferente do vetor 13." << endl;
+    }
+    
+    cout << "\nO angulo entre LEFT e UP é: " << Vector3::LEFT.angle(Vector3::UP) << " graus." << endl;
+    
+    Vector3 vetor14 = vetor13.reflect(vetor4);
+    cout << "\nO vetor 13 refletido em relação a normal do vetor 4 é: " << endl;
+    vetor14.showVector();
     
     cout << endl;
     
