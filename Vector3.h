@@ -1,10 +1,13 @@
+#ifndef _VECTOR3_H_
+#define _VECTOR3_H_
+
 class Vector3{
 public:
     // declaração das coordenadas x, y e z do vetor.
     float x, y, z;
     
-    // construtor da classe Vector3, com as 3 coordenadas passadas como parametro.
-    //Vector3();
+    // construtores da classe Vector3, um sem argumentos que seta x, y e z para zero, e outro que recebe os 3 valores.
+    Vector3();
     Vector3(float uX, float uY, float uZ);
     
     // atributos estáticos dos vetores que apontam para as respectivas direções.
@@ -83,3 +86,4 @@ public:
     Vector3 reflect(Vector3 normal);
     void showVector();
 };
+#endif // _VECTOR3_H_

@@ -106,6 +106,9 @@ int main(){
     cout << "\nO vetor 13 refletido em relação a normal do vetor 4 é: " << endl;
     vetor14.showVector();
     
+    Vector3 vetor15;
+    vetor15.showVector();
+    
     cout << endl;
     
     return 0;

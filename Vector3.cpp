@@ -5,10 +5,13 @@
 
 using namespace std;
 
-//Vector3::Vector3(){
-//}
+// abaixo estão as implementações dos métodos declarados no Vector3.h e a atribuição estática dos vetores que apontam nas direções especificadas.
+Vector3::Vector3(){
+    this->x = 0;
+    this->y = 0;
+    this->z = 0;
+}
 
-// abaixo está as implementações dos métodos declarados no Vector3.h e a atribuição estática dos vetores que apontam nas direções especificadas.
 Vector3::Vector3(float uX, float uY, float uZ){
     this->x = uX;
     this->y = uY;
