@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Vector3.h"
+#include "Sphere.h"
 
 using namespace std;
 
@@ -60,14 +61,14 @@ int main(){
     
     cout << endl << "====================================================================" << endl;
     
-    cout << "\nProduto escalar entre vetor1 e vetor2: " << vetor1.produtoEscalar(vetor2) << endl;
+    cout << "\nProduto escalar entre vetor1 e vetor2: " << vetor1.dot(vetor2) << endl;
     
     cout << endl << "====================================================================" << endl;
     
     // há 3 maneiras de se gerar um produto vetorial entre 2 vetores:
     // utilizarei o vetor9 e vetor 10 cujo produto vetorial é (2, -7, -6) para formar o vetor11 e vetor12 que devem ter o mesmo valor.
     // na terceira maneira irei modificar diretamente o vetor9 para ser o produto vetorial dele com o vetor10.
-    Vector3 vetor11 = vetor9.produtoVetorial(vetor10);
+    Vector3 vetor11 = vetor9.cross(vetor10);
     Vector3 vetor12 = vetor9 % vetor10;
     
     cout << "\nVetor 11: " << endl;
@@ -108,6 +109,11 @@ int main(){
     
     Vector3 vetor15;
     vetor15.showVector();
+    
+    Sphere esfera1(vetor13, 3.5);
+    cout << "\nCentro da esfera 1: ";
+    esfera1.center.showVector();
+    cout << "Raio da esfera 1: " << esfera1.radius << endl;
     
     cout << endl;
     

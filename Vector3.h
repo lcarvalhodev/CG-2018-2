@@ -50,7 +50,7 @@ public:
     }
     // operador %= que faz o produto vetorial entre o proprio vetor por um vetor v2 e coloca o resultado no proprio vetor.
     void operator%=(Vector3 v2){
-        *this = produtoVetorial(v2);
+        *this = cross(v2);
     }
     // operador % que faz o produto vetorial entre o proprio vetor e um vetor v2 e retorna o resultado em um novo vetor.
     Vector3 operator%(Vector3 v2){
@@ -80,8 +80,8 @@ public:
     // a normal de um plano e um método que printa as coordenadas x, y e z do vetor.
     float norma();
     void normalizarVetor();
-    float produtoEscalar(Vector3 v2);
-    Vector3 produtoVetorial(Vector3 v2);
+    float dot(Vector3 v2);
+    Vector3 cross(Vector3 v2);
     float angle(Vector3 v2);
     Vector3 reflect(Vector3 normal);
     void showVector();
