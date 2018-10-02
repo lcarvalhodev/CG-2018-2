@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Vector3.h"
 #include "Sphere.h"
-
+#include <math.h>
 #include <GL/glut.h>
 #include <GL/glext.h>
 
@@ -9,28 +9,41 @@
 
 using namespace std;
 
-float W = 100.0, H = 100.0;
+float W = 50.0, H = 50.0;
 
 bool inter = true;
-float x = 10, y = 10;
+float x = 0.0, y = 0.0;
+float raio = 10;
+float x_centro = 0;
+float y_centro = 0;
+
+float circulo(float x){
+    y = sqrt((raio*raio) - (x*x));
+    return y;
+}
 
 void colorePonto(){
    
     glClear (GL_COLOR_BUFFER_BIT);    
     glLoadIdentity();   
     glBegin(GL_POINTS); 
-    if(inter)        
-    	glColor3f(0, 0, 1);
-    else
-    	glColor3f(0, 0, 0);
-    glVertex3f(x, y, -1.);       
+    for(float x = -20000.0; x<=20000.0; x=x+0.1 ){
+            y = circulo(x);
+            if(inter)        
+                glColor3f(1, 1, 1);
+            else
+                glColor3f(0, 0, 0); 
+            glVertex3f(x, y, -1);
+            glVertex3f(x, -y, -1);
+        
+    }
+           
     glEnd();    
     glFlush();
 }
 
-
 void init(void){
-    glClearColor((195%255)/255., (150%255)/255., (160%255)/255., 0.0);
+    glClearColor((0%255)/255., (0%255)/255., (0%255)/255., 0.0);
 }
 
 // exemplo do professor pra pintar de acordo com o tamanho da tela
@@ -60,7 +73,7 @@ int main(int argc, char **argv){
     
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowSize(300, 300);
-    glutInitWindowPosition(000, 000);
+    glutInitWindowPosition(000, 100);
     glutCreateWindow("Snow Man");
     glutDisplayFunc(colorePonto);
     glutReshapeFunc(resize);
