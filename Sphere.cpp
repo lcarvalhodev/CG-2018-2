@@ -3,9 +3,10 @@
 Sphere::Sphere(){
 }
 
-Sphere::Sphere(Vector3 c, float r){
+Sphere::Sphere(Vector3 c, float r, Material m){
     this->center = c;
     this->radius = r;
+    this->material = m;
 }
 
 bool Sphere::intersection(Vector3 p){

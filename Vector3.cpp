@@ -72,6 +72,12 @@ Vector3 Vector3::reflect(Vector3 normal){
     return res;
 }
 
+void Vector3::at(Vector3 v2){
+    this->x = this->x * v2.x;
+    this->y = this->y * v2.y;
+    this->z = this->z * v2.z;
+}
+
 void Vector3::showVector(){
     cout << "\nCoordenadas do vetor: " << this->x << ", " << this->y << ", " << this->z << ";" << endl;
 }

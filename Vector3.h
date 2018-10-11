@@ -24,9 +24,21 @@ public:
     Vector3 operator+(Vector3 v2){
         return Vector3(x + v2.x, y + v2.y, z + v2.z);
     }
+    
+    void operator+=(Vector3 v2){
+        this->x = this->x + v2.x;
+        this->y = this->y + v2.y;
+        this->z = this->z + v2.z;
+    }
     // operador - que será usado para subtrair 2 vetores.
     Vector3 operator-(Vector3 v2){
         return Vector3(x - v2.x, y - v2.y, z - v2.z);
+    }
+    
+    void operator-=(Vector3 v2){
+        this->x = this->x - v2.x;
+        this->y = this->y - v2.y;
+        this->z = this->z - v2.z;
     }
     // operador *= que será usado para multiplicar o proprio vetor por uma escalar e.
     void operator*=(float e){
@@ -84,6 +96,7 @@ public:
     Vector3 cross(Vector3 v2);
     float angle(Vector3 v2);
     Vector3 reflect(Vector3 normal);
+    void at(Vector3 v2);
     void showVector();
 };
 #endif // _VECTOR3_H_
