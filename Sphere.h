@@ -1,21 +1,46 @@
-#ifndef _SPHERE_H_
-#define _SPHERE_H_
-#include "Vector3.h"
-#include "Material.h"
+#ifndef _SPHERE_H
+#define _SPHERE_H
 
-// classe esfera que contém como atributos o raio, vetor centro e um objeto material com vetores dos coeficientes.
-class Sphere{
-public:
-    Sphere();
-    Sphere(Vector3 c, float r, Material m);
-    // o método intersection utiliza a fórmula para checar se há interseção de um vetor p dado como parametro
-    // e retorna true se há interseção entre o vetor e a esfera e false caso não haja.
-    bool intersection(Vector3 p);
-    
-    Vector3 center;
-    float radius;
-    Material material;
-    
+#include "Object.h"
+#include "Vect.h"
+#include "math.h"
+#include "Color.h"
+
+// To render a sphere in 3D, we need the position of center and the radius
+
+class Sphere : public Object{
+    Vect center;
+    double radius;
+    Color color;
+
+    public:
+
+    //general constructor
+    Sphere ();
+
+    //another instance
+    Sphere (Vect, double, Color);
+
+    //method functions
+
+    //Gets (using virtual values)
+    Vect getSphereCenter() {return center;}
+    double getSphereRadius() {return radius;}
+    Color getSphereColor() {return color;}
 };
 
-#endif // _SPHERE_H_
+// default origin 3d scene (0,0,0) and default radius 1, and default color gray
+Sphere::Sphere () {
+    center = Vect(0,0,0);
+    radius = 1;
+    color = Color(0.5,0.5,0.5, 0);
+}
+
+// not default origin and direction
+Sphere::Sphere (Vect centerValue, double radiusValue, Color colorValue) {
+    center = centerValue;
+    radius = radiusValue;
+    color = colorValue;
+}
+
+#endif
