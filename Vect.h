@@ -36,6 +36,11 @@ class Vect {
     double getVectY() {return y; }
     double getVectZ() {return z; }
 
+    //Setters
+    void setVectX(double xValue) {x=xValue; }
+    void setVectY(double yValue) {y=yValue; }
+    void setVectZ(double zValue) {z=zValue; }
+
     //magnitude
     double magnitude() {
         return sqrt((x*x) + (y*y) + (z*z));

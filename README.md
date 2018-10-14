@@ -5,6 +5,9 @@ Repository created for the discipline of Computer Graphics taught at the Federal
 
 This Readme provides information about project development, such as tools used and commands required to use the project. In addition, it will inform discipline-related issues such as project participants and goals based on what is decided in the classroom about application development.
 
+##Project
+Build a Ray Tracer to render a snowman considering all variables (Light, Planes, Shadows, Objects, etc.)
+
 ### Prerequisites
 
 You should know basic of C++ programming language and basic Math.
