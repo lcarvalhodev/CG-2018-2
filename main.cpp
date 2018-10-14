@@ -97,6 +97,59 @@ void saveBMP (const char *filename, int w, int h, int dpi, RGBType *data) {
     fclose(f);
 }
 
+//function to sort all intersection vect and return the index of winning object ( closer to the camera)
+int winningObjectIndex(vector<double> object_intersections){
+    int index_of_minimum_value;
+
+    //prevent unnecessary calculation
+    
+    if (object_intersections.size() == 0 ) {
+        //if there are no intersections
+        return -1;
+    }
+    else if ( object_intersections.size() == 1 ){
+        
+        if (object_intersections.at(0) > 0 ) {
+            //if that intersection is greater than zero then its our index of minimum value
+            return 0;
+        }
+        else {
+            //otherwise the only intersection value is negative
+            return -1;
+        }
+        
+    }
+    else{
+        //otherwise there is more than one intersection 
+        // first find tha maximum value
+
+        double max = 0;
+        for(int i=0; i< object_intersections.size(); i++){
+            if(max < object_intersections.at(i)){
+                max = object_intersections.at(i);
+            }
+        }
+
+        //find the minimum using the max
+        
+        if (max > 0) {
+            //only positives
+            for (int index = 0; index < object_intersections.size(); index++){
+                
+                if (object_intersections.at(index) >0 && object_intersections.at(index) <= max ) {
+                    max = object_intersections.at(index);
+                    index_of_minimum_value = index;
+                }
+            }
+            return index_of_minimum_value;
+        }
+        else{
+            //all intersections are negative
+            return -1;
+        }
+    }
+}
+
 //global variable to index actual pixel
 int thisone;
 
@@ -112,7 +165,8 @@ int main(int argc, char const *argv[])
     int height= 480;
 
     //aspect ratio
-    int aspectRatio = (double) width/ (double) height;
+    double aspectRatio = (double)width/(double)height;
+
     //total of pixels
     int n = width * height;
 
@@ -167,10 +221,54 @@ int main(int argc, char const *argv[])
     //Plane -1 because the plane it has to be located ubder the sphere with radius 1
     Plane scene_plane (Y,-1,maroon);
 
+    vector<Object*> scene_objects;
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
+    scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
+
+    double xamnt, yamnt; 
+
     //for loop to get all pixels in image
     for (int x = 0; x < width; x++){
         for (int y = 0; y < height; y++){
             thisone = y*width +x;
+
+            
+            if (width > height) {
+                // the image is wider than tall
+                xamnt = ((x+0.5)/width) * aspectRatio - (((width-height)/ (double) height)/2);
+                yamnt = ((height - y ) + 0.5)/ height;
+            }
+
+            else if (height > width){
+                //image is taller than wider
+                xamnt = (x+0.5)/width;
+                yamnt= (((height - y) +0.5)/height)/aspectRatio - (((height-width)/(double) width)/2);
+            }
+            else {
+                //the image is square
+                xamnt= (x+0.5)/ width;
+                yamnt = ((height-y) + 0.5)/height;
+            }
+
+            //creatin rays from origin
+            Vect cam_ray_origin = scene_cam.getCameraPosition();
+            Vect cam_ray_direction = camDir.vectAdd(camRight.vectMult(xamnt-0.5).vectAdd(camDown.vectMult(yamnt-0.5))).normalize();
+
+            Ray cam_ray (cam_ray_origin,cam_ray_direction);
+
+            //sending rays to the scene to look for intersections
+            vector<double> intersections;
+
+            //verify if each object on ths scene is intersect by rays
+            for (int index = 0; index < scene_objects.size(); index++){
+
+                intersections.push_back(scene_objects.at(index) ->findIntersectiom(cam_ray));
+                
+            }
+
+            //verify wich object is closer to the camera
+            int index_of_winning_object = winningObjectIndex(intersections); 
+            
             
             //return a color
             if ((x>200 && x< 440) && (y>200 && y<280)) {
