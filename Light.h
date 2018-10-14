@@ -1,3 +1,17 @@
+/*
+Graphics Computer 2018.2
+Federal University of Ceará
+
+Team: Leandro Almeida de Carvalho (Leader)
+      Letícia Fernandes
+      Levi 
+      Karen
+      Kayron
+
+Professor: Creto Vidal
+Work: Build a RayTracer to render a snowman with a image background.
+*/
+
 #ifndef _LIGHT_H
 #define _LIGHT_H
 

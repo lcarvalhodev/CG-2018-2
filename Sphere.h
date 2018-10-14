@@ -1,3 +1,16 @@
+/*
+Graphics Computer 2018.2
+Federal University of Ceará
+
+Team: Leandro Almeida de Carvalho (Leader)
+      Letícia Fernandes
+      Levi 
+      Karen
+      Kayron
+
+Professor: Creto Vidal
+Work: Build a RayTracer to render a snowman with a image background.
+*/
 #ifndef _SPHERE_H
 #define _SPHERE_H
 
@@ -26,7 +39,7 @@ class Sphere : public Object{
     //Gets 
     Vect getSphereCenter() {return center;}
     double getSphereRadius() {return radius;}
-    Color getSphereColor() {return color;}
+    virtual Color getColor() {return color;}
 
     //Get Normal at some point
     Vect getNormalAt(Vect point){
@@ -36,7 +49,7 @@ class Sphere : public Object{
     }
 
     //Find intersection return a double representing th distance of the ray to the point of intersection
-    double findIntersection(Ray ray) {
+    virtual double findIntersection(Ray ray) {
         Vect ray_origin = ray.getRayOrigin();
         double ray_origin_x = ray_origin.getVectX();
         double ray_origin_y = ray_origin.getVectY();

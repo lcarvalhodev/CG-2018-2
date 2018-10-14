@@ -1,3 +1,17 @@
+/*
+Graphics Computer 2018.2
+Federal University of Ceará
+
+Team: Leandro Almeida de Carvalho (Leader)
+      Letícia Fernandes
+      Levi 
+      Karen
+      Kayron
+
+Professor: Creto Vidal
+Work: Build a RayTracer to render a snowman with a image background.
+*/
+
 #ifndef _PLANE_H
 #define _PLANE_H
 
@@ -27,7 +41,7 @@ class Plane : public Object{
     //Gets
     Vect getPlaneNormal() {return normal;}
     double getPlaneDistance() {return distance;}
-    Color getPlaneColor() {return color;}
+    virtual Color getColor() {return color;}
 
     //get normal in some point
     Vect getNormalAt( Vect point){
@@ -35,7 +49,7 @@ class Plane : public Object{
     }
 
     //distance to thr ray oring to a point of intersection
-    double findIntersection(Ray ray){
+    virtual double findIntersection(Ray ray){
         Vect ray_direction = ray.getRayDirection();
         
         double a = ray_direction.dotProduct(normal);

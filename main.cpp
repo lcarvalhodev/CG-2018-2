@@ -1,3 +1,17 @@
+/*
+Graphics Computer 2018.2
+Federal University of Ceará
+
+Team: Leandro Almeida de Carvalho (Leader)
+      Letícia Fernandes
+      Levi 
+      Karen
+      Kayron
+
+Professor: Creto Vidal
+Work: Build a RayTracer to render a snowman with a image background.
+*/
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -261,25 +275,27 @@ int main(int argc, char const *argv[])
 
             //verify if each object on ths scene is intersect by rays
             for (int index = 0; index < scene_objects.size(); index++){
-
-                intersections.push_back(scene_objects.at(index) ->findIntersectiom(cam_ray));
-                
+                intersections.push_back(scene_objects.at(index) ->findIntersection(cam_ray));
             }
 
             //verify wich object is closer to the camera
-            int index_of_winning_object = winningObjectIndex(intersections); 
-            
-            
+            int index_of_winning_object = winningObjectIndex(intersections);            
+
+            cout << index_of_winning_object;            
             //return a color
-            if ((x>200 && x< 440) && (y>200 && y<280)) {
-                pixels[thisone].r = 23;
-                pixels[thisone].g = 222;
-                pixels[thisone].b = 10;
-            } 
-            else{
+            //if index is negative, ray misses, and then it will be black
+            if (index_of_winning_object == -1) {
+                //set the background
                 pixels[thisone].r = 0;
                 pixels[thisone].g = 0;
                 pixels[thisone].b = 0;
+            } 
+            else{
+                //intersect an object
+                Color this_color = scene_objects.at(index_of_winning_object)->getColor();
+                pixels[thisone].r = this_color.getColorRed();
+                pixels[thisone].g = this_color.getColorGreen();
+                pixels[thisone].b = this_color.getColorBlue();
             }
         }      
     }
