@@ -267,6 +267,10 @@ int main(int argc, char const *argv[])
 
     //origin the scene
     Vect O (0,0,0);
+    Vect O2 (0,1.5,0);
+    Vect O3 (0,0,0);
+    Vect O4 (0,0.2,0);
+    Vect O5 (0,0.4,0);
 
     //Camera position
     Vect camPos (3,1.5,-4);
@@ -307,8 +311,11 @@ int main(int argc, char const *argv[])
     //Sphere instance to test snowman
     //The snowman is made by two white spheres
 
-    Sphere scene_sphere (O ,1,pretty_green);
-    // Sphere scene_sphere2 ( 1, 0.5, white_light);
+    Sphere scene_sphere (O ,1,white_light);
+    Sphere scene_sphere2 ( O2, 0.6, white_light);
+    Sphere scene_sphere3 ( O2, 0.2, black);
+    Sphere scene_sphere4 ( O2, 0.2, black);
+    Sphere scene_sphere5 ( O2, 0.2, black);
 
     //Plane -1 because the plane it has to be located ubder the sphere with radius 1
     Plane scene_plane (Y,-1,maroon);
@@ -316,7 +323,10 @@ int main(int argc, char const *argv[])
     //add here all objects on the scene
     vector<Object*> scene_objects;
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere5));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     double xamnt, yamnt; 
