@@ -60,6 +60,27 @@ class Color {
     Color colorAverage(Color color){
         return Color ((red + color.getColorRed())/2, (green+color.getColorGreen())/2, (blue+ color.getColorBlue())/2, special);
     }
+
+    //function to make color of the light / shadow correct
+    Color clip(){
+        double all_light = red + green + blue;
+        double excessLight = all_light - 3;
+        if(excessLight > 0){
+            red = red + excessLight*(red/all_light);
+            green = green + excessLight*(green/all_light);
+            blue = blue + excessLight*(blue/all_light);
+        }
+
+        //normalize colo in cases of exceed
+        if( red > 1 ){ red = 1;}
+        if( green > 1 ){ green = 1;}
+        if( blue > 1 ){ blue = 1;}
+        if( red < 0 ){ red = 0;}
+        if( green < 0 ){ green = 0;}
+        if( blue < 0 ){ blue = 0;}
+
+        return Color (red,green,blue,special);
+    }
 };
 
 

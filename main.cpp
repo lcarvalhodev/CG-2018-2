@@ -167,7 +167,70 @@ int winningObjectIndex(vector<double> object_intersections){
 
 Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<Source*> light_sources, double accuracy, double ambienteLight){
 
-    return Color(0,0,0,0);
+    Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
+    Vect winning_object_normal = scene_objects.at(index_of_winning_object)->getNormalAt(intersection_position);
+
+    Color final_color = winning_object_color.colorScalar(ambienteLight);
+
+    for(int light_index = 0; light_index < light_sources.size(); light_index ++){
+        Vect light_direction = light_sources.at(light_index)->getLightPosition().vectAdd(intersection_position.negative()).normalize();
+
+        float cosine_angle = winning_object_normal.dotProduct(light_direction);
+
+        if (cosine_angle > 0 ){
+            //test for shadows
+            bool shadowed = false;
+
+            Vect distance_to_light = light_sources.at(light_index)->getLightPosition().vectAdd(intersection_position.negative()).normalize();
+
+            float distance_to_light_magnitude = distance_to_light.magnitude();
+
+            //verify if ray of light intersects with another ray to create a shadow
+            Ray shadow_ray (intersection_position, light_sources.at(light_index)->getLightPosition().vectAdd(intersection_position.negative()).normalize());
+
+            //vector of intersection values
+            vector<double> secondary_intersections;
+
+            //loop to find this intersections
+            for(int object_index= 0; object_index < scene_objects.size() && shadowed == false ; object_index++){
+                secondary_intersections.push_back(scene_objects.at(object_index)->findIntersection(shadow_ray));
+            }
+
+            //loop fro secondary_intersections
+            for(int c=0; c<secondary_intersections.size(); c++){
+                if(secondary_intersections.at(c) > accuracy){
+                    if(secondary_intersections.at(c) <= distance_to_light_magnitude ){
+                        shadowed=true;
+                    }
+                    break;
+                }
+            }
+
+            if(shadowed == false){
+                final_color = final_color.colorAdd(winning_object_color.colorMult(light_sources.at(light_index)->getLightColor()).colorScalar(cosine_angle));
+
+                if(winning_object_color.getColorSpecial() > 0 && winning_object_color.getColorSpecial() <=1){
+                    //special 0-1
+                    double dot1 = winning_object_normal.dotProduct(intersecting_ray_direction.negative());
+                    Vect scalar1 = winning_object_normal.vectMult(dot1);
+                    Vect add1 = scalar1.vectAdd(intersecting_ray_direction);
+                    Vect scalar2 = add1.vectMult(2);
+                    Vect add2 = intersecting_ray_direction.negative().vectAdd(scalar2);
+                    Vect reflection_direction = add2.normalize();
+
+                    double specular = reflection_direction.dotProduct(light_direction);
+                    if(specular > 0){
+                        specular = pow(specular,10);
+                        final_color = final_color.colorAdd(light_sources.at(light_index)->getLightColor().colorScalar(specular*winning_object_color.getColorSpecial()));
+                    }
+
+
+                }
+
+            }
+        }
+    }
+    return final_color.clip();
 }
 
 //global variable to index actual pixel
@@ -298,7 +361,7 @@ int main(int argc, char const *argv[])
             //verify wich object is closer to the camera
             int index_of_winning_object = winningObjectIndex(intersections);            
 
-            cout << index_of_winning_object;            
+            // cout << index_of_winning_object;            
             //return a color
             //if index is negative, ray misses, and then it will be black
             if (index_of_winning_object == -1) {

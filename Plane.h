@@ -44,7 +44,7 @@ class Plane : public Object{
     virtual Color getColor() {return color;}
 
     //get normal in some point
-    Vect getNormalAt( Vect point){
+    virtual Vect getNormalAt( Vect point){
         return normal;
     }
 
