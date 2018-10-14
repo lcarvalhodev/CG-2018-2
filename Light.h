@@ -16,12 +16,13 @@ Work: Build a RayTracer to render a snowman with a image background.
 #define _LIGHT_H
 
 #include "Vect.h"
+#include "Source.h"
 #include "Color.h"
 
 
 //Light is made of vectors (Origin and Direction)
 
-class Light {
+class Light: public Source {
     Vect position;
     Color color;
 

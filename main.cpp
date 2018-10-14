@@ -31,6 +31,7 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Light.h"
 #include "Sphere.h" 
 #include "Object.h"
+#include "Source.h"
 #include "Plane.h"       
 
 
@@ -164,6 +165,11 @@ int winningObjectIndex(vector<double> object_intersections){
     }
 }
 
+Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, vector<Object*> scene_objects, int index_of_winning_object, vector<Source*> light_sources, double accuracy, double ambienteLight){
+
+    return Color(0,0,0,0);
+}
+
 //global variable to index actual pixel
 int thisone;
 
@@ -180,6 +186,10 @@ int main(int argc, char const *argv[])
 
     //aspect ratio
     double aspectRatio = (double)width/(double)height;
+
+    //values for light
+    double ambienteLight = 0.2;
+    double accuracy = 0.000001;
 
     //total of pixels
     int n = width * height;
@@ -225,18 +235,25 @@ int main(int argc, char const *argv[])
 
     Light scene_light (light_position, white_light);
 
+    //multiples lights
+    vector<Source*> light_sources;
+    light_sources.push_back(dynamic_cast<Source*>(&scene_light));
+
     //Scene objects
 
     //Sphere instance to test snowman
     //The snowman is made by two white spheres
 
     Sphere scene_sphere (O ,1,pretty_green);
+    // Sphere scene_sphere2 ( 1, 0.5, white_light);
 
     //Plane -1 because the plane it has to be located ubder the sphere with radius 1
     Plane scene_plane (Y,-1,maroon);
 
+    //add here all objects on the scene
     vector<Object*> scene_objects;
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     double xamnt, yamnt; 
@@ -292,10 +309,21 @@ int main(int argc, char const *argv[])
             } 
             else{
                 //intersect an object
-                Color this_color = scene_objects.at(index_of_winning_object)->getColor();
-                pixels[thisone].r = this_color.getColorRed();
-                pixels[thisone].g = this_color.getColorGreen();
-                pixels[thisone].b = this_color.getColorBlue();
+
+                //making a shadow
+
+                if(intersections.at(index_of_winning_object) > accuracy){
+                    //determine position and direction vector at the point of intersection
+
+                    Vect intersection_position = cam_ray_origin.vectAdd(cam_ray_direction.vectMult(intersections.at(index_of_winning_object)));
+                    Vect intersecting_ray_direction = cam_ray_direction;
+
+                    Color intersection_color = getcolorAt(intersection_position, intersecting_ray_direction, scene_objects,index_of_winning_object, light_sources,accuracy, ambienteLight);
+                    
+                    pixels[thisone].r = intersection_color.getColorRed();
+                    pixels[thisone].g = intersection_color.getColorGreen();
+                    pixels[thisone].b = intersection_color.getColorBlue();
+                }
             }
         }      
     }
