@@ -73,19 +73,19 @@ class Sphere : public Object{
     //Find intersection return a double representing the distance of the ray to the point of intersection
     virtual double findIntersection(Ray ray) {
         Vect ray_origin = ray.getRayOrigin();
-        double ray_origin_x = ray_origin.getVectX();
-        double ray_origin_y = ray_origin.getVectY();
-        double ray_origin_z = ray_origin.getVectZ();
+        double ray_origin_x = ray_origin.getCoordinateX();
+        double ray_origin_y = ray_origin.getCoordinateY();
+        double ray_origin_z = ray_origin.getCoordinateZ();
 
         Vect ray_direction = ray.getRayDirection();
-        double ray_direction_x = ray_direction.getVectX();
-        double ray_direction_y = ray_direction.getVectY();
-        double ray_direction_z = ray_direction.getVectZ();
+        double ray_direction_x = ray_direction.getCoordinateX();
+        double ray_direction_y = ray_direction.getCoordinateY();
+        double ray_direction_z = ray_direction.getCoordinateZ();
 
         Vect sphere_center = center;
-        double sphere_center_x = sphere_center.getVectX();
-        double sphere_center_y = sphere_center.getVectY();
-        double sphere_center_z = sphere_center.getVectZ();
+        double sphere_center_x = sphere_center.getCoordinateX();
+        double sphere_center_y = sphere_center.getCoordinateY();
+        double sphere_center_z = sphere_center.getCoordinateZ();
 
         double a = 1; //normalized
         double b = (2*(ray_origin_x - sphere_center_x)*ray_direction_x) + (2*(ray_origin_y - sphere_center_y)*ray_direction_y) + (2*(ray_origin_z - sphere_center_z)*ray_direction_z);

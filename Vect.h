@@ -32,9 +32,9 @@ class Vect {
     //method functions
 
     //Getters coordinates from a Vect
-    double getVectX() {return x; }
-    double getVectY() {return y; }
-    double getVectZ() {return z; }
+    double getCoordinateX() {return x; }
+    double getCoordinateY() {return y; }
+    double getCoordinateZ() {return z; }
 
     //Setters
     void setVectX(double xValue) {x=xValue; }
@@ -59,16 +59,16 @@ class Vect {
 
     //Vect produts
     double dotProduct ( Vect v) {
-        return x*v.getVectX() + y*v.getVectY() + z*v.getVectZ();
+        return x*v.getCoordinateX() + y*v.getCoordinateY() + z*v.getCoordinateZ();
     }
 
     Vect crossProduct(Vect v) {
-        return Vect(y*v.getVectZ() - z*v.getVectY(), z*v.getVectX() - x*v.getVectZ(), x*v.getVectY() - y*v.getVectX() );
+        return Vect(y*v.getCoordinateZ() - z*v.getCoordinateY(), z*v.getCoordinateX() - x*v.getCoordinateZ(), x*v.getCoordinateY() - y*v.getCoordinateX() );
     }
 
     //Add vects
     Vect vectAdd( Vect v ){
-        return Vect (x+v.getVectX(), y+ v.getVectY(), z+v.getVectZ());
+        return Vect (x+v.getCoordinateX(), y+ v.getCoordinateY(), z+v.getCoordinateZ());
     }
 
     //multiply vects
