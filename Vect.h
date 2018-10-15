@@ -4,9 +4,9 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
@@ -31,7 +31,7 @@ class Vect {
 
     //method functions
 
-    //Gets
+    //Getters coordinates from a Vect
     double getVectX() {return x; }
     double getVectY() {return y; }
     double getVectZ() {return z; }
@@ -41,12 +41,12 @@ class Vect {
     void setVectY(double yValue) {y=yValue; }
     void setVectZ(double zValue) {z=zValue; }
 
-    //magnitude
+    //magnitude function
     double magnitude() {
         return sqrt((x*x) + (y*y) + (z*z));
     }
 
-    //normalize vector
+    //normalize vector function
     Vect normalize(){
         double magnitude = sqrt((x*x) + (y*y) + (z*z));
         return Vect(x/magnitude, y/magnitude, z/magnitude);
@@ -77,12 +77,14 @@ class Vect {
     }
 };
 
+//default values for Vect
 Vect::Vect () {
     x=0;
     y=0;
     z=0;
 }
 
+//initializing vector with defined values
 Vect::Vect (double i, double j, double k) {
     x=i;
     y=j;

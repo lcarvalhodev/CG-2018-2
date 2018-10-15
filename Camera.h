@@ -4,13 +4,14 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
+
 
 #ifndef _CAMERA_H
 #define _CAMERA_H
@@ -37,10 +38,18 @@ class Camera {
     //method functions
 
     //Gets
-    Vect getCameraPosition() {return camPos;}
-    Vect getCameraDirection() {return camDir;}
-    Vect getCameraRight() {return camRight;}
-    Vect getCameraDown() {return camDown;}
+    Vect getCameraPosition() {
+        return camPos;
+    }
+    Vect getCameraDirection() {
+        return camDir;
+    }
+    Vect getCameraRight() {
+        return camRight;
+    }
+    Vect getCameraDown() {
+        return camDown;
+    }
 
 };
 

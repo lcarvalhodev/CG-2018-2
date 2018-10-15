@@ -4,13 +4,14 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
+
 
 #ifndef _PLANE_H
 #define _PLANE_H
@@ -19,8 +20,6 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Vect.h"
 #include "math.h"
 #include "Color.h"
-
-// To render a Plane in 3D, we need the position of center and the radius
 
 class Plane : public Object{
     Vect normal;
@@ -39,9 +38,15 @@ class Plane : public Object{
     //method functions
 
     //Gets
-    Vect getPlaneNormal() {return normal;}
-    double getPlaneDistance() {return distance;}
-    virtual Color getColor() {return color;}
+    Vect getPlaneNormal() {
+        return normal;
+    }
+    double getPlaneDistance() {
+        return distance;
+    }
+    virtual Color getColor() {
+        return color;
+    }
 
     //get normal in some point
     virtual Vect getNormalAt( Vect point){

@@ -4,19 +4,23 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
 
+
 #ifndef _COLOR_H
 #define _COLOR_H
 
+
+//RGB type colors
+// The special color is udes to define some details of a color like reflection or tiles floor
 class Color {
-    double red,green,blue, special;
+    double red,green,blue,special;
 
     public:
 
@@ -29,10 +33,18 @@ class Color {
     //method functions
 
     //Gets
-    double getColorRed() {return red; }
-    double getColorGreen() {return green; }
-    double getColorBlue() {return blue; }
-    double getColorSpecial() {return special; }
+    double getColorRed() {
+        return red; 
+    }
+    double getColorGreen() {
+        return green;
+    }
+    double getColorBlue() {
+        return blue;
+    }
+    double getColorSpecial() {
+        return special; 
+    }
 
     // Setters functions
     double setColorRed(double redValue) {red = redValue; }
@@ -71,7 +83,7 @@ class Color {
             blue = blue + excessLight*(blue/all_light);
         }
 
-        //normalize colo in cases of exceed
+        //normalize clip in cases of exceed
         if( red > 1 ){ red = 1;}
         if( green > 1 ){ green = 1;}
         if( blue > 1 ){ blue = 1;}

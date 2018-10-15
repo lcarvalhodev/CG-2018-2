@@ -4,13 +4,14 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
+
 #ifndef _SPHERE_H
 #define _SPHERE_H
 
@@ -20,8 +21,11 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Color.h"
 
 // To render a sphere in 3D, we need the position of center and the radius
+// This class is a subclass of class Object
 
 class Sphere : public Object{
+    
+    //attributes for Sphere
     Vect center;
     double radius;
     Color color;
@@ -36,19 +40,37 @@ class Sphere : public Object{
 
     //method functions
 
-    //Gets 
-    Vect getSphereCenter() {return center;}
-    double getSphereRadius() {return radius;}
-    virtual Color getColor() {return color;}
+    //Getters 
+    Vect getSphereCenter() {
+        return center;
+    }
+    double getSphereRadius() {
+        return radius;
+    }
+    virtual Color getColor() {
+        return color;
+    }
+
+    //Setters 
+    void setSphereCenter(Vect centerValue) {
+        center = centerValue;
+    }
+    void setSphereRadius(double radiusValue) {
+        radius = radiusValue;
+    }
+    virtual void setColor( Color colorValue) {
+        color = colorValue;
+    }
+    
 
     //Get Normal at some point
-   virtual Vect getNormalAt(Vect point){
+    virtual Vect getNormalAt(Vect point){
         //normal always points away from the center of a sphere
         Vect normal_Vect = point.vectAdd(center.negative()).normalize();
         return normal_Vect;
     }
 
-    //Find intersection return a double representing th distance of the ray to the point of intersection
+    //Find intersection return a double representing the distance of the ray to the point of intersection
     virtual double findIntersection(Ray ray) {
         Vect ray_origin = ray.getRayOrigin();
         double ray_origin_x = ray_origin.getVectX();
@@ -84,7 +106,7 @@ class Sphere : public Object{
             }
 
             else{
-                //the second root is teh smallest positive root
+                //the second root is the smallest positive root
                 double root_2 = ((sqrt(discriminant) - b)/2) - 0.001;
                 return root_2;
             }

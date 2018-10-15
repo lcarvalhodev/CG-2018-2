@@ -4,13 +4,14 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
+
 
 #include <iostream>
 #include <fstream>
@@ -113,18 +114,19 @@ void saveBMP (const char *filename, int w, int h, int dpi, RGBType *data) {
 }
 
 //function to sort all intersection vect and return the index of winning object ( closer to the camera)
-int winningObjectIndex(vector<double> object_intersections){
+// winning is the closest object from the point of view the ray
+int winningObjectIndex(vector<double> object_on_scene){
     int index_of_minimum_value;
 
     //prevent unnecessary calculation
     
-    if (object_intersections.size() == 0 ) {
-        //if there are no intersections
+    if (object_on_scene.size() == 0 ) {
+        //if there are no intersections (ray does not intersect any object on the scene)
         return -1;
     }
-    else if ( object_intersections.size() == 1 ){
+    else if ( object_on_scene.size() == 1 ){
         
-        if (object_intersections.at(0) > 0 ) {
+        if (object_on_scene.at(0) > 0 ) {
             //if that intersection is greater than zero then its our index of minimum value
             return 0;
         }
@@ -137,22 +139,20 @@ int winningObjectIndex(vector<double> object_intersections){
     else{
         //otherwise there is more than one intersection 
         // first find tha maximum value
-
         double max = 0;
-        for(int i=0; i< object_intersections.size(); i++){
-            if(max < object_intersections.at(i)){
-                max = object_intersections.at(i);
+        for(int i=0; i< object_on_scene.size(); i++){
+            if(max < object_on_scene.at(i)){
+                max = object_on_scene.at(i);
             }
         }
 
-        //find the minimum using the max
-        
+        //find the minimum using the max     
         if (max > 0) {
             //only positives
-            for (int index = 0; index < object_intersections.size(); index++){
+            for (int index = 0; index < object_on_scene.size(); index++){
                 
-                if (object_intersections.at(index) >0 && object_intersections.at(index) <= max ) {
-                    max = object_intersections.at(index);
+                if (object_on_scene.at(index) >0 && object_on_scene.at(index) <= max ) {
+                    max = object_on_scene.at(index);
                     index_of_minimum_value = index;
                 }
             }
@@ -339,7 +339,7 @@ int main(int argc, char const *argv[])
     Vect camPos (0,1,-6);
     // Vect camPos (3,1.5,-4);
 
-    //Camera
+    //Camera first parameter is right and left, second up and down , third depth
     Vect look_at (0,0,0);
 
     // Vect diff between is the difference between camPos and the coordinates of Vect look_at
@@ -376,7 +376,7 @@ int main(int argc, char const *argv[])
     //Scene objects
 
     //Sphere instance to test snowman
-    //The snowman is made by two white spheres
+    //The snowman is made by two white spheres and spheres to eyes and buttons
 
     Sphere scene_sphere (O ,1,white_light);
     Sphere scene_sphere2 ( O2, 0.6, white_light);
@@ -387,8 +387,8 @@ int main(int argc, char const *argv[])
     Sphere scene_sphere7 ( O7, 0.05, maroon2);
     Sphere scene_sphere8 ( O8, 0.05, maroon2);
 
-    //Plane -1 because the plane it has to be located ubder the sphere with radius 1
-    Plane scene_plane (Y,-1,maroon);
+    //Plane -1 because the plane it has to be located under the sphere with radius 1
+    Plane scene_plane (Y,-1,gray);
 
     //add here all objects on the scene
     vector<Object*> scene_objects;

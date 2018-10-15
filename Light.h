@@ -20,7 +20,7 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Color.h"
 
 
-//Light is made of vectors (Origin and Direction)
+//Light is made of vector position and color of the light
 
 class Light: public Source {
     Vect position;
@@ -37,17 +37,21 @@ class Light: public Source {
     //method functions
 
     //Gets (using virtual values)
-    virtual Vect getLightPosition() {return position;}
-    virtual Color getLightColor() {return color;}
+    virtual Vect getLightPosition() {
+        return position;
+    }
+    virtual Color getLightColor() {
+        return color;
+    }
 };
 
-// default origin 3d scene (0,0,0) and default direction is X on plan
+// default position and color
 Light::Light () {
     position = Vect(0,0,0);
     color = Color(1,1,1, 0);
 }
 
-// not default origin and direction
+// not default position and color
 Light::Light (Vect p, Color c) {
     position = p;
     color = c;

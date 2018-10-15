@@ -4,13 +4,14 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
 */
+
 
 #ifndef _OBJECT_H
 #define _OBJECT_H
@@ -19,7 +20,7 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Ray.h"
 #include "Color.h"
 
-// This class will be base to all other obect class
+// This class will be base to all other object class like sphere or plane
 class Object {
 
     public:
@@ -28,7 +29,9 @@ class Object {
     Object ();
 
     //Get color
-    virtual Color getColor() {return Color( 0.0, 0.0 ,0.0 , 0); }
+    virtual Color getColor() {
+        return Color( 0.0, 0.0 ,0.0 , 0); 
+    }
 
     virtual Vect getNormalAt(Vect intersection_position){ 
         return Vect(0,0,0);

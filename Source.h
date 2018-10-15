@@ -4,9 +4,9 @@ Federal University of Ceará
 
 Team: Leandro Almeida de Carvalho (Leader)
       Letícia Fernandes
-      Levi 
-      Karen
-      Kayron
+      Levi Tavares
+      Karen Raiany
+      Kayron Melo
 
 Professor: Creto Vidal
 Work: Build a RayTracer to render a snowman with a image background.
@@ -22,8 +22,14 @@ class Source {
 
     Source();
 
-    virtual Vect getLightPosition() {return Vect (0,0,0);}
-    virtual Color getLightColor(){ return Color (1,1,1,0); }
+    //Getters
+    virtual Vect getLightPosition() {
+        return Vect (0,0,0);
+    }
+
+    virtual Color getLightColor(){ 
+        return Color (1,1,1,0); 
+    }
 
 };
 
