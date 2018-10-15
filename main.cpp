@@ -25,6 +25,9 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include <stdio.h>
 #include <time.h>
 
+#include <FreeImage.h>
+
+
 #include "Vect.h"
 #include "Ray.h"
 #include "Camera.h"
@@ -183,8 +186,7 @@ Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
             closest_object_color.setColorRed(1);
             closest_object_color.setColorGreen(1);
             closest_object_color.setColorBlue(1);
-        }
-
+        }  
     }
 
     Color final_color = closest_object_color.colorScalar(ambienteLight);
@@ -288,7 +290,12 @@ int thisone;
 
 int main(int argc, char const *argv[])
 {
+    // testing freeimage
+    FreeImage_Initialise();
+    // cout << FreeImage_GetVersion() << endl;
     cout << "Rendering snowman ... " << endl;
+
+    FreeImage_Load(FIF_PNG, "aurora.png", PNG_DEFAULT);
 
     //dpi
     int dpi = 80;
