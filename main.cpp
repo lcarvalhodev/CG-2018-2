@@ -170,7 +170,59 @@ Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
     Color winning_object_color = scene_objects.at(index_of_winning_object)->getColor();
     Vect winning_object_normal = scene_objects.at(index_of_winning_object)->getNormalAt(intersection_position);
 
+    if(winning_object_color.getColorSpecial() == 2){
+        
+        int square = (int) floor(intersection_position.getVectX()) + (int)floor(intersection_position.getVectZ());
+
+        if((square%2 == 0)){
+            winning_object_color.setColorRed(0);
+            winning_object_color.setColorGreen(0);
+            winning_object_color.setColorBlue(0);
+        }
+        else {
+            winning_object_color.setColorRed(1);
+            winning_object_color.setColorGreen(1);
+            winning_object_color.setColorBlue(1);
+        }
+
+    }
+
     Color final_color = winning_object_color.colorScalar(ambienteLight);
+
+    //Reflections
+    if(winning_object_color.getColorSpecial() > 0 && winning_object_color.getColorSpecial() <=1 ){
+        // reflect objects with special value
+        double dot1 = winning_object_normal.dotProduct(intersecting_ray_direction.negative());
+        Vect scalar1 = winning_object_normal.vectMult(dot1);
+        Vect add1 = scalar1.vectAdd(intersecting_ray_direction);
+        Vect scalar2 = add1.vectMult(2);
+        Vect add2 = intersecting_ray_direction.negative().vectAdd(scalar2);
+        Vect reflection_direction = add2.normalize();
+
+        Ray reflection_ray (intersection_position,reflection_direction);
+
+        //determine the ray first intersection
+        vector<double> reflection_intersections;
+
+        for(int reflection_index = 0; reflection_index < scene_objects.size(); reflection_index ++ ){
+            reflection_intersections.push_back(scene_objects.at(reflection_index)->findIntersection(reflection_ray));
+        }
+
+        int index_of_winning_object_with_reflections = winningObjectIndex(reflection_intersections);
+
+        if(index_of_winning_object_with_reflections != -1){
+            //reflection ray misses eveything
+            if(reflection_intersections.at(index_of_winning_object_with_reflections) > accuracy){
+                //determine position and direction at the point of intersection
+                Vect reflect_intersection_position = intersection_position.vectAdd(reflection_direction.vectMult(reflection_intersections.at(index_of_winning_object_with_reflections)));
+                Vect reflect_intersection_ray_direction = reflection_direction;
+
+                Color reflect_intersection_color = getcolorAt(reflect_intersection_position,reflect_intersection_ray_direction,scene_objects,index_of_winning_object_with_reflections, light_sources, accuracy, ambienteLight);
+            
+                final_color = final_color.colorAdd(reflect_intersection_color.colorScalar(winning_object_color.getColorSpecial()));
+            }
+        }
+    }
 
     for(int light_index = 0; light_index < light_sources.size(); light_index ++){
         Vect light_direction = light_sources.at(light_index)->getLightPosition().vectAdd(intersection_position.negative()).normalize();
@@ -240,6 +292,10 @@ int main(int argc, char const *argv[])
 {
     cout << "Rendering ... " << endl;
 
+    clock_t t1,t2;
+
+    t1 = clock();
+
     //dpi
     int dpi = 72;
     
@@ -260,6 +316,9 @@ int main(int argc, char const *argv[])
     //RGBType
     RGBType *pixels = new RGBType[n];
 
+    int aadepth = 5;
+    double aatreshold = 0.1;
+
     // Directions X,Y,Z
     Vect X (1,0,0);
     Vect Y (0,1,0);
@@ -267,17 +326,18 @@ int main(int argc, char const *argv[])
 
     //all coordinates from spheres in scene
     Vect O (0,0,0);
-    Vect O2 (0,1.5,0);
-    Vect O3 (O.getVectX(),O.getVectY(),O.getVectZ()-0.97);
-    Vect O4 (O.getVectX(),O.getVectY() +0.25,O.getVectZ()-0.97);
-    Vect O5 (O.getVectX(),O.getVectY() +0.5,O.getVectZ()-0.94);
-    Vect O6 (O2.getVectX() + 0.2 ,O2.getVectY()+ 0.05,O.getVectZ()-0.55);
-    Vect O7 (O2.getVectX() - 0.2 ,O2.getVectY() + 0.05,O.getVectZ()-0.55);
-    Vect O8 (O2.getVectX() ,O2.getVectY() - 0.15 ,O.getVectZ()-0.55);
+    // Vect O2 (0,1.5,0);
+    // Vect O3 (O.getVectX(),O.getVectY(),O.getVectZ()-0.97);
+    // Vect O4 (O.getVectX(),O.getVectY() +0.25,O.getVectZ()-0.97);
+    // Vect O5 (O.getVectX(),O.getVectY() +0.5,O.getVectZ()-0.94);
+    // Vect O6 (O2.getVectX() + 0.2 ,O2.getVectY()+ 0.05,O.getVectZ()-0.55);
+    // Vect O7 (O2.getVectX() - 0.2 ,O2.getVectY() + 0.05,O.getVectZ()-0.55);
+    // Vect O8 (O2.getVectX() ,O2.getVectY() - 0.15 ,O.getVectZ()-0.55);
 
     //Camera position
     //first parameter aproxximately of camera - second parameter view of height - third parameter is the rotation
-    Vect camPos (0,1,-6);
+    // Vect camPos (0,1,-6);
+    Vect camPos (3,1.5,-4);
 
     //Camera
     Vect look_at (0,0,0);
@@ -298,12 +358,14 @@ int main(int argc, char const *argv[])
     //Colors lights
     Color white_light (1.0,1.0,1.0,0);
     Color pretty_green(0.5,1.0,0.5,0.3);
-    Color maroon (0.5,0.25,0.25,0);
+    Color maroon (0.5,0.25,0.25,2);
     Color gray(0.5,0.5,0.5,0);
     Color black(0.0,0.0,0.0,0.0);
 
     //light position firstparameter represents x (right and left), second paramter represents y
-    Vect light_position (0,10,-12);
+    // Vect light_position (0,10,-12);
+    Vect light_position (-7,10,-10);
+
     Light scene_light (light_position, white_light);
 
     //multiples lights
@@ -315,103 +377,173 @@ int main(int argc, char const *argv[])
     //Sphere instance to test snowman
     //The snowman is made by two white spheres
 
-    Sphere scene_sphere (O ,1,white_light);
-    Sphere scene_sphere2 ( O2, 0.6, white_light);
-    Sphere scene_sphere3 ( O3, scene_sphere.getSphereRadius()/12, pretty_green);
-    Sphere scene_sphere4 ( O4, scene_sphere.getSphereRadius()/12, pretty_green);
-    Sphere scene_sphere5 ( O5, scene_sphere.getSphereRadius()/12, pretty_green);
-    Sphere scene_sphere6 ( O6, 0.05, maroon);
-    Sphere scene_sphere7 ( O7, 0.05, maroon);
-    Sphere scene_sphere8 ( O8, 0.05, maroon);
+    Sphere scene_sphere (O ,1,pretty_green);
+    // Sphere scene_sphere2 ( O2, 0.6, white_light);
+    // Sphere scene_sphere3 ( O3, scene_sphere.getSphereRadius()/12, pretty_green);
+    // Sphere scene_sphere4 ( O4, scene_sphere.getSphereRadius()/12, pretty_green);
+    // Sphere scene_sphere5 ( O5, scene_sphere.getSphereRadius()/12, pretty_green);
+    // Sphere scene_sphere6 ( O6, 0.05, maroon);
+    // Sphere scene_sphere7 ( O7, 0.05, maroon);
+    // Sphere scene_sphere8 ( O8, 0.05, maroon);
 
     //Plane -1 because the plane it has to be located ubder the sphere with radius 1
-    Plane scene_plane (Y,-1,gray);
+    Plane scene_plane (Y,-1,maroon);
 
     //add here all objects on the scene
     vector<Object*> scene_objects;
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere5));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere5));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
+    int thisone,aa_index;
     double xamnt, yamnt; 
+    double tempRed, tempGreen, tempBlue;
 
     //for loop to get all pixels in image
     for (int x = 0; x < width; x++){
         for (int y = 0; y < height; y++){
             thisone = y*width +x;
 
+            //start with an blank pixel
+            double tempRed[aadepth*aadepth];
+            double tempGreen[aadepth*aadepth];
+            double tempBlue[aadepth*aadepth];
             
-            if (width > height) {
-                // the image is wider than tall
-                xamnt = ((x+0.5)/width) * aspectRatio - (((width-height)/ (double) height)/2);
-                yamnt = ((height - y ) + 0.5)/ height;
-            }
+            for(int aax =0; aax < aadepth; aax++){
+                for(int aay =0; aay < aadepth; aay++){
 
-            else if (height > width){
-                //image is taller than wider
-                xamnt = (x+0.5)/width;
-                yamnt= (((height - y) +0.5)/height)/aspectRatio - (((height-width)/(double) width)/2);
-            }
-            else {
-                //the image is square
-                xamnt= (x+0.5)/ width;
-                yamnt = ((height-y) + 0.5)/height;
-            }
+                    aa_index = aay*aadepth + aax;
+                    srand(time(0));
 
-            //creatin rays from origin
-            Vect cam_ray_origin = scene_cam.getCameraPosition();
-            Vect cam_ray_direction = camDir.vectAdd(camRight.vectMult(xamnt-0.5).vectAdd(camDown.vectMult(yamnt-0.5))).normalize();
+                    //create the ray from the camera to this pixel
+                    if(aadepth == 1){
+                        if (width > height) {
+                            // the image is wider than tall
+                            xamnt = ((x+0.5)/width) * aspectRatio - (((width-height)/ (double) height)/2);
+                            yamnt = ((height - y ) + 0.5)/ height;
+                        }
 
-            Ray cam_ray (cam_ray_origin,cam_ray_direction);
+                        else if (height > width){
+                            //image is taller than wider
+                            xamnt = (x+0.5)/width;
+                            yamnt= (((height - y) +0.5)/height)/aspectRatio - (((height-width)/(double) width)/2);
+                        }
+                        else {
+                            //the image is square
+                            xamnt= (x+0.5)/ width;
+                            yamnt = ((height-y) + 0.5)/height;
+                        }
+                    }
 
-            //sending rays to the scene to look for intersections
-            vector<double> intersections;
+                    else{
+                        //anti-aliasing
+                        if (width > height) {
+                            // the image is wider than tall
+                            xamnt = ((x+(double)aax / ((double)aadepth - 1))/width) * aspectRatio - (((width-height)/ (double) height)/2);
+                            yamnt = ((height - y ) + (double)aax / ((double)aadepth - 1))/ height;
+                        }
 
-            //verify if each object on ths scene is intersect by rays
-            for (int index = 0; index < scene_objects.size(); index++){
-                intersections.push_back(scene_objects.at(index) ->findIntersection(cam_ray));
-            }
+                        else if (height > width){
+                            //image is taller than wider
+                            xamnt = (x+(double)aax / ((double)aadepth - 1))/width;
+                            yamnt= (((height - y) +(double)aax / ((double)aadepth - 1))/height)/aspectRatio - (((height-width)/(double) width)/2);
+                        }
+                        else {
+                            //the image is square
+                            xamnt= (x+(double)aax / ((double)aadepth - 1))/ width;
+                            yamnt = ((height-y) + (double)aax / ((double)aadepth - 1))/height;
+                        }
+                    }
 
-            //verify wich object is closer to the camera
-            int index_of_winning_object = winningObjectIndex(intersections);            
-
-            // cout << index_of_winning_object;            
-            //return a color
-            //if index is negative, ray misses, and then it will be black
-            if (index_of_winning_object == -1) {
-                //set the background
-                pixels[thisone].r = 0;
-                pixels[thisone].g = 0;
-                pixels[thisone].b = 0;
-            } 
-            else{
-                //intersect an object
-
-                //making a shadow
-
-                if(intersections.at(index_of_winning_object) > accuracy){
-                    //determine position and direction vector at the point of intersection
-
-                    Vect intersection_position = cam_ray_origin.vectAdd(cam_ray_direction.vectMult(intersections.at(index_of_winning_object)));
-                    Vect intersecting_ray_direction = cam_ray_direction;
-
-                    Color intersection_color = getcolorAt(intersection_position, intersecting_ray_direction, scene_objects,index_of_winning_object, light_sources,accuracy, ambienteLight);
                     
-                    pixels[thisone].r = intersection_color.getColorRed();
-                    pixels[thisone].g = intersection_color.getColorGreen();
-                    pixels[thisone].b = intersection_color.getColorBlue();
-                }
+
+                    //creatin rays from origin
+                    Vect cam_ray_origin = scene_cam.getCameraPosition();
+                    Vect cam_ray_direction = camDir.vectAdd(camRight.vectMult(xamnt-0.5).vectAdd(camDown.vectMult(yamnt-0.5))).normalize();
+
+                    Ray cam_ray (cam_ray_origin,cam_ray_direction);
+
+                    //sending rays to the scene to look for intersections
+                    vector<double> intersections;
+
+                    //verify if each object on ths scene is intersect by rays
+                    for (int index = 0; index < scene_objects.size(); index++){
+                        intersections.push_back(scene_objects.at(index) ->findIntersection(cam_ray));
+                    }
+
+                    //verify wich object is closer to the camera
+                    int index_of_winning_object = winningObjectIndex(intersections);            
+
+                    // cout << index_of_winning_object;            
+                    //return a color
+                    //if index is negative, ray misses, and then it will be black
+                    if (index_of_winning_object == -1) {
+                        //set the background
+                        tempRed[aa_index] = 0;
+                        tempGreen[aa_index] = 0;
+                        tempBlue[aa_index] = 0;
+                    } 
+                    else{
+                        //intersect an object
+
+                        //making a shadow
+
+                        if(intersections.at(index_of_winning_object) > accuracy){
+                            //determine position and direction vector at the point of intersection
+
+                            Vect intersection_position = cam_ray_origin.vectAdd(cam_ray_direction.vectMult(intersections.at(index_of_winning_object)));
+                            Vect intersecting_ray_direction = cam_ray_direction;
+
+                            Color intersection_color = getcolorAt(intersection_position, intersecting_ray_direction, scene_objects,index_of_winning_object, light_sources,accuracy, ambienteLight);
+                            
+                            tempRed[aa_index] = intersection_color.getColorRed();
+                            tempGreen[aa_index] = intersection_color.getColorGreen();
+                            tempBlue[aa_index] = intersection_color.getColorBlue();
+                        }
+                    }
+                }      
             }
-        }      
+
+            //average the pixel color
+            double totalRed = 0;
+            double totalGreen = 0;
+            double totalBlue = 0;
+
+            for(int iRed=0; iRed< aadepth*aadepth; iRed++){
+                totalRed=totalRed+tempRed[iRed];
+            }
+            for(int iGreen=0; iGreen< aadepth*aadepth; iGreen++){
+                totalGreen=totalGreen+tempGreen[iGreen];
+            }
+            for(int iBlue=0; iBlue< aadepth*aadepth; iBlue++){
+                totalBlue=totalBlue+tempBlue[iBlue];
+            }
+
+            double avgRed = totalRed / (aadepth*aadepth);
+            double avgGreen = totalGreen / (aadepth*aadepth);
+            double avgBlue = totalBlue / (aadepth*aadepth);
+
+            pixels[thisone].r = avgRed;
+            pixels[thisone].g = avgGreen;
+            pixels[thisone].b = avgBlue;
+        }
     }
 
     saveBMP("scene.bmp", width,height,dpi,pixels);
+
+    delete pixels,tempRed, tempGreen, tempBlue;
+
+    t2 =clock();
+
+    float diff = ((float)t2 - (float)t1);
+
+    cout << diff << " seconds." << endl;
 
     return 0;
 }

@@ -37,7 +37,7 @@ class Color {
     // Setters functions
     double setColorRed(double redValue) {red = redValue; }
     double setColorGreen(double greenValue) {green = greenValue; }
-    double serColorBlue(double blueValue) {blue = blueValue; }
+    double setColorBlue(double blueValue) {blue = blueValue; }
     double setColorSpecial(double specialValue) {special = specialValue; }
 
     //bright (to set shadow)
