@@ -316,7 +316,7 @@ int main(int argc, char const *argv[])
     //RGBType
     RGBType *pixels = new RGBType[n];
 
-    int aadepth = 5;
+    int aadepth = 1;
     double aatreshold = 0.1;
 
     // Directions X,Y,Z
@@ -326,18 +326,18 @@ int main(int argc, char const *argv[])
 
     //all coordinates from spheres in scene
     Vect O (0,0,0);
-    // Vect O2 (0,1.5,0);
-    // Vect O3 (O.getVectX(),O.getVectY(),O.getVectZ()-0.97);
-    // Vect O4 (O.getVectX(),O.getVectY() +0.25,O.getVectZ()-0.97);
-    // Vect O5 (O.getVectX(),O.getVectY() +0.5,O.getVectZ()-0.94);
-    // Vect O6 (O2.getVectX() + 0.2 ,O2.getVectY()+ 0.05,O.getVectZ()-0.55);
-    // Vect O7 (O2.getVectX() - 0.2 ,O2.getVectY() + 0.05,O.getVectZ()-0.55);
-    // Vect O8 (O2.getVectX() ,O2.getVectY() - 0.15 ,O.getVectZ()-0.55);
+    Vect O2 (0,1.5,0);
+    Vect O3 (O.getVectX(),O.getVectY(),O.getVectZ()-0.97);
+    Vect O4 (O.getVectX(),O.getVectY() +0.25,O.getVectZ()-0.97);
+    Vect O5 (O.getVectX(),O.getVectY() +0.5,O.getVectZ()-0.94);
+    Vect O6 (O2.getVectX() + 0.2 ,O2.getVectY()+ 0.05,O.getVectZ()-0.55);
+    Vect O7 (O2.getVectX() - 0.2 ,O2.getVectY() + 0.05,O.getVectZ()-0.55);
+    Vect O8 (O2.getVectX() ,O2.getVectY() - 0.15 ,O.getVectZ()-0.55);
 
     //Camera position
     //first parameter aproxximately of camera - second parameter view of height - third parameter is the rotation
-    // Vect camPos (0,1,-6);
-    Vect camPos (3,1.5,-4);
+    Vect camPos (0,1,-6);
+    // Vect camPos (3,1.5,-4);
 
     //Camera
     Vect look_at (0,0,0);
@@ -359,12 +359,13 @@ int main(int argc, char const *argv[])
     Color white_light (1.0,1.0,1.0,0);
     Color pretty_green(0.5,1.0,0.5,0.3);
     Color maroon (0.5,0.25,0.25,2);
+    Color maroon2 (0.5,0.25,0.25,0);
     Color gray(0.5,0.5,0.5,0);
     Color black(0.0,0.0,0.0,0.0);
 
     //light position firstparameter represents x (right and left), second paramter represents y
-    // Vect light_position (0,10,-12);
-    Vect light_position (-7,10,-10);
+    Vect light_position (0,10,-12);
+    // Vect light_position (-7,10,-10);
 
     Light scene_light (light_position, white_light);
 
@@ -377,14 +378,14 @@ int main(int argc, char const *argv[])
     //Sphere instance to test snowman
     //The snowman is made by two white spheres
 
-    Sphere scene_sphere (O ,1,pretty_green);
-    // Sphere scene_sphere2 ( O2, 0.6, white_light);
-    // Sphere scene_sphere3 ( O3, scene_sphere.getSphereRadius()/12, pretty_green);
-    // Sphere scene_sphere4 ( O4, scene_sphere.getSphereRadius()/12, pretty_green);
-    // Sphere scene_sphere5 ( O5, scene_sphere.getSphereRadius()/12, pretty_green);
-    // Sphere scene_sphere6 ( O6, 0.05, maroon);
-    // Sphere scene_sphere7 ( O7, 0.05, maroon);
-    // Sphere scene_sphere8 ( O8, 0.05, maroon);
+    Sphere scene_sphere (O ,1,white_light);
+    Sphere scene_sphere2 ( O2, 0.6, white_light);
+    Sphere scene_sphere3 ( O3, scene_sphere.getSphereRadius()/12, pretty_green);
+    Sphere scene_sphere4 ( O4, scene_sphere.getSphereRadius()/12, pretty_green);
+    Sphere scene_sphere5 ( O5, scene_sphere.getSphereRadius()/12, pretty_green);
+    Sphere scene_sphere6 ( O6, 0.05, maroon2);
+    Sphere scene_sphere7 ( O7, 0.05, maroon2);
+    Sphere scene_sphere8 ( O8, 0.05, maroon2);
 
     //Plane -1 because the plane it has to be located ubder the sphere with radius 1
     Plane scene_plane (Y,-1,maroon);
@@ -392,13 +393,13 @@ int main(int argc, char const *argv[])
     //add here all objects on the scene
     vector<Object*> scene_objects;
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere5));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
-    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere5));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
     scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     int thisone,aa_index;
