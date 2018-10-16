@@ -302,8 +302,8 @@ int main(int argc, char const *argv[])
 	FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename("aurora.png");
 	img = FreeImage_Load(fif, "aurora.png");
 	RGBQUAD color;
-	if(FreeImage_GetPixelColor(img, 128, 128, &color))
-        std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
+	// if(FreeImage_GetPixelColor(img, 128, 128, &color))
+    //     std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
 
     //dpi
     int dpi = 80;
@@ -349,7 +349,7 @@ int main(int argc, char const *argv[])
     // Vect camPos (3,1.5,-4);
 
     //Camera first parameter is right and left, second up and down , third depth
-    //not show yet
+    //not show yet (adjust later)
     Vect cam_look (0,0,0);
 
     // Vect diff between is the difference between camPos and the coordinates of Vect cam_look
