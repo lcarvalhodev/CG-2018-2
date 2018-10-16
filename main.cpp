@@ -47,6 +47,7 @@ struct RGBType {
     double g;
     double b;
 };
+ FIBITMAP *img;
 
 //function to save image
 void saveBMP (const char *filename, int w, int h, int dpi, RGBType *data) {
@@ -111,7 +112,6 @@ void saveBMP (const char *filename, int w, int h, int dpi, RGBType *data) {
 
         fwrite(color,1,3,f);
     }
-
     //close file
     fclose(f);
 }
@@ -292,15 +292,23 @@ int main(int argc, char const *argv[])
 {
     // testing freeimage
     FreeImage_Initialise();
-    // cout << FreeImage_GetVersion() << endl;
-    cout << "Rendering snowman ... " << endl;
+    // // cout << FreeImage_GetVersion() << endl;
+    // cout << "Rendering snowman ... " << endl;
 
-    FreeImage_Load(FIF_PNG, "aurora.png", PNG_DEFAULT);
+    // FreeImage_Load(FIF_PNG, "aurora.png", );
+
+    //GET BG IMAGE STUFF
+	FreeImage_Initialise ();
+	FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename("aurora.png");
+	img = FreeImage_Load(fif, "aurora.png");
+	RGBQUAD color;
+	if(FreeImage_GetPixelColor(img, 128, 128, &color))
+        std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
 
     //dpi
     int dpi = 80;
     
-    //dimens for image
+    //dimens for image 
     int width = 640;
     int height= 480;
 
@@ -326,8 +334,8 @@ int main(int argc, char const *argv[])
     Vect Z (0,0,1);
 
     //all coordinates from spheres in scene
-    Vect O (0,0,0);
-    Vect O2 (0,1.5,0);
+    Vect O (0,0,0); //body
+    Vect O2 (0,1.5,0); // head
     Vect O3 (O.getCoordinateX(),O.getCoordinateY(),O.getCoordinateZ()-0.97);
     Vect O4 (O.getCoordinateX(),O.getCoordinateY() +0.25,O.getCoordinateZ()-0.97);
     Vect O5 (O.getCoordinateX(),O.getCoordinateY() +0.5,O.getCoordinateZ()-0.94);
@@ -341,6 +349,7 @@ int main(int argc, char const *argv[])
     // Vect camPos (3,1.5,-4);
 
     //Camera first parameter is right and left, second up and down , third depth
+    //not show yet
     Vect cam_look (0,0,0);
 
     // Vect diff between is the difference between camPos and the coordinates of Vect cam_look
@@ -375,7 +384,6 @@ int main(int argc, char const *argv[])
     light_sources.push_back(dynamic_cast<Source*>(&scene_light));
 
     //Scene objects
-
     //Sphere instance to test snowman
     //The snowman is made by two white spheres and spheres to eyes and buttons
 
@@ -389,7 +397,7 @@ int main(int argc, char const *argv[])
     Sphere scene_sphere8 ( O8, 0.05, maroon2);
 
     //Plane -1 because the plane it has to be located under the sphere with radius 1
-    Plane scene_plane (Y,-1,maroon2);
+    // Plane scene_plane (Y,-1,maroon2);
 
     //add here all objects on the scene
     vector<Object*> scene_objects;
@@ -401,7 +409,7 @@ int main(int argc, char const *argv[])
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
-    scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
+    // scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     int thisone,aa_index;
     double xamnt, yamnt; 
@@ -479,19 +487,22 @@ int main(int argc, char const *argv[])
 
                     //verify wich object is closer to the camera
                     int index_of_closest_object = closestObjectIndex(intersections);            
-
-                    // cout << index_of_closest_object;            
+           
                     //return a color
                     //if index is negative, ray misses, and then it will be black
                     if (index_of_closest_object == -1) {
                         //set the background
-                        tempRed[aa_index] = 0;
-                        tempGreen[aa_index] = 0;
-                        tempBlue[aa_index] = 0;
+                        if(FreeImage_GetPixelColor(img, x, y, &color)){
+                            tempRed[aa_index] = (float) (color.rgbRed)/255;
+                            tempGreen[aa_index] = (float) (color.rgbGreen)/255;
+                            tempBlue[aa_index] = (float) (color.rgbBlue)/255; 
+                        }
+                            // std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
+                        // cout <<  (float) color.rgbRed/100 << endl;
+                       
                     } 
                     else{
                         //intersect an object
-
                         //making a shadow
 
                         if(intersections.at(index_of_closest_object) > accuracy){
@@ -535,9 +546,11 @@ int main(int argc, char const *argv[])
         }
     }
 
-    saveBMP("scene.bmp", width,height,dpi,pixels);
+    saveBMP("scene_snowman.bmp", width,height,dpi,pixels);
 
     delete pixels,tempRed, tempGreen, tempBlue;
+
+    FreeImage_DeInitialise();
 
     return 0;
 }
