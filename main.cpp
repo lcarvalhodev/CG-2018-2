@@ -288,6 +288,53 @@ Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
 
 //global variable to index actual pixel
 int thisone;
+vector<Object*> scene_objects;
+//make cube
+void makeCube(Vect corner1, Vect corner2, Color color ){
+
+    //corner1
+    double c1x = corner1.getCoordinateX();
+    double c1y = corner1.getCoordinateY();
+    double c1z = corner1.getCoordinateZ();
+
+    //corner2
+    double c2x = corner2.getCoordinateX();
+    double c2y = corner2.getCoordinateY();
+    double c2z = corner2.getCoordinateZ();
+
+    Vect A (c2x, c1y, c1z);
+    Vect B (c2x, c1y, c2z);
+    Vect C (c1x, c1y, c2z);
+
+    Vect D (c2x, c2y, c1z);
+    Vect E (c1x, c2y, c1z);
+    Vect F (c1x, c2y, c2z);
+
+    //left side
+    scene_objects.push_back(new Triangle(D,A,corner1,color));
+    scene_objects.push_back(new Triangle(corner1,E,D,color));
+
+    //far side
+    scene_objects.push_back(new Triangle(corner2,B,A,color));
+    scene_objects.push_back(new Triangle(A,D,corner2,color));
+
+    //right side
+    scene_objects.push_back(new Triangle(F,C,B,color));
+    scene_objects.push_back(new Triangle(B,corner2,F,color));
+
+    //front side
+    scene_objects.push_back(new Triangle(E,corner1,C,color));
+    scene_objects.push_back(new Triangle(C,F,E,color));
+
+    //top
+    scene_objects.push_back(new Triangle(D,E,F,color));
+    scene_objects.push_back(new Triangle(F,corner2,D,color));
+
+    //bottom
+    scene_objects.push_back(new Triangle(corner1,A,B,color));
+    scene_objects.push_back(new Triangle(B,C,corner1,color));
+
+}
 
 int main(int argc, char const *argv[])
 {
@@ -372,6 +419,7 @@ int main(int argc, char const *argv[])
     Color maroon (0.5,0.25,0.25,2);
     Color maroon2 (0.5,0.25,0.25,0);
     Color gray(0.5,0.5,0.5,0);
+    Color orange (0.94, 0.75, 0.31, 0);
     Color black(0.0,0.0,0.0,0.0);
 
     //light position firstparameter represents x (right and left), second paramter represents y
@@ -397,11 +445,14 @@ int main(int argc, char const *argv[])
     Sphere scene_sphere7 ( O7, 0.05, maroon2);
     Sphere scene_sphere8 ( O8, 0.05, maroon2);
 
+    //Triangles
+    Triangle scene_Triangle( Vect (3,0,0), Vect (0,3,0) , Vect (0,0,3), orange);
+
     //Plane -1 because the plane it has to be located under the sphere with radius 1
     // Plane scene_plane (Y,-1,maroon2);
 
     //add here all objects on the scene
-    vector<Object*> scene_objects;
+    
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
@@ -410,6 +461,8 @@ int main(int argc, char const *argv[])
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_Triangle));
+    makeCube(Vect(1,1,1), Vect(-1,-1,-1), orange);
     // scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     int thisone,aa_index;
