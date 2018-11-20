@@ -36,7 +36,8 @@ Work: Build a RayTracer to render a snowman with a image background.
 #include "Sphere.h" 
 #include "Object.h"
 #include "Source.h"
-#include "Plane.h"       
+#include "Plane.h" 
+#include "Triangle.h"      
 
 
 using namespace std;
@@ -250,7 +251,7 @@ Color getcolorAt(Vect intersection_position, Vect intersecting_ray_direction, ve
                 secondary_intersections.push_back(scene_objects.at(object_index)->findIntersection(shadow_ray));
             }
 
-            //loop fro secondary_intersections
+            //loop foo secondary_intersections
             for(int c=0; c<secondary_intersections.size(); c++){
                 if(secondary_intersections.at(c) > accuracy){
                     if(secondary_intersections.at(c) <= distance_to_light_magnitude ){
