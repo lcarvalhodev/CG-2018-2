@@ -52,7 +52,7 @@ class Triangle : public Object{
     }
     virtual Color getColor() {
         return color;
-    }
+    }   
 
     //get normal in some point
     virtual Vect getNormalAt( Vect point){

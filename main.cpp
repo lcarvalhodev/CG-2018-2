@@ -347,8 +347,8 @@ int main(int argc, char const *argv[])
 
     //GET BG IMAGE STUFF
 	FreeImage_Initialise ();
-	FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename("aurora.png");
-	img = FreeImage_Load(fif, "aurora.png");
+	FREE_IMAGE_FORMAT fif = FreeImage_GetFIFFromFilename("Stonehenge2.png");
+	img = FreeImage_Load(fif, "Stonehenge2.png");
 	RGBQUAD color;
 	// if(FreeImage_GetPixelColor(img, 128, 128, &color))
     //     std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
@@ -364,7 +364,7 @@ int main(int argc, char const *argv[])
     double aspectRatio = (double)width/(double)height;
 
     //values for light
-    double ambienteLight = 0.2;
+    double ambienteLight = 0.6;
     double accuracy = 0.000001;
 
     //total of pixels
@@ -382,6 +382,24 @@ int main(int argc, char const *argv[])
     Vect Z (0,0,1);
 
     //all coordinates from spheres in scene
+    Vect rock1 (-6,0,0);
+    Vect rock2 (-6,0,2.2);
+    Vect rock3 (-6,1.2,1);
+
+    Vect rock4 (4,0,0);
+    Vect rock5 (4,0,2.2);
+    Vect rock6 (4,1.2,1);
+
+    Vect rock7 (0,0,4);
+    Vect rock8 (-2,0,4);
+    Vect rock9 (-1,1.5,4);
+
+    Vect rock10 (0,0,-4);
+    Vect rock11 (-2,0,-4);
+    Vect rock12 (-1,1.2,-4);
+
+    Vect sol (-8.5,4,1);
+
     Vect O (0,0,0); //body
     Vect O2 (0,1.5,0); // head
     Vect O3 (O.getCoordinateX(),O.getCoordinateY(),O.getCoordinateZ()-0.97);
@@ -393,8 +411,8 @@ int main(int argc, char const *argv[])
 
     //Camera position
     //first parameter aproxximately of camera - second parameter view of height - third parameter is the rotation
-    Vect camPos (0,1,-6);
-    // Vect camPos (3,1.5,-4);
+    // Vect camPos (0,1,-6);
+    Vect camPos (3,6.5,-9);
 
     //Camera first parameter is right and left, second up and down , third depth
     //not show yet (adjust later)
@@ -415,16 +433,18 @@ int main(int argc, char const *argv[])
 
     //Colors lights
     Color white_light (1.0,1.0,1.0,0);
-    Color pretty_green(0.5,1.0,0.5,0.3);
+    Color pretty_green(0.5,1.0,0.5,0.0);
+    Color green(0.1,0.22,0.1,0.0);
     Color maroon (0.5,0.25,0.25,2);
     Color maroon2 (0.5,0.25,0.25,0);
     Color gray(0.5,0.5,0.5,0);
-    Color orange (0.94, 0.75, 0.31, 0);
+    Color orange (0.7, 0.5, 0.2, 0);
+    Color orange2 (0.7, 0.5, 0.2, 0.5);
     Color black(0.0,0.0,0.0,0.0);
 
     //light position firstparameter represents x (right and left), second paramter represents y
-    Vect light_position (0,10,-12);
-    // Vect light_position (-7,10,-10);
+    // Vect light_position (0,10,-12);
+    Vect light_position (-7,10,-10);
 
     Light scene_light (light_position, white_light);
 
@@ -437,6 +457,19 @@ int main(int argc, char const *argv[])
     //The snowman is made by two white spheres and spheres to eyes and buttons
 
     Sphere scene_sphere (O ,1,white_light);
+    Sphere scene_rock1 (rock1 ,1,gray);
+    Sphere scene_rock2 (rock2 ,1,gray);
+    Sphere scene_rock3 (rock3 ,1,gray);
+    Sphere scene_rock4 (rock4 ,1,gray);
+    Sphere scene_rock5 (rock5 ,1,gray);
+    Sphere scene_rock6 (rock6 ,1,gray);
+    Sphere scene_rock7 (rock7 ,1,gray);
+    Sphere scene_rock8 (rock8 ,1,gray);
+    Sphere scene_rock9 (rock9 ,1,gray);
+    Sphere scene_rock10 (rock10 ,1,gray);
+    Sphere scene_rock11 (rock11 ,1,gray);
+    Sphere scene_rock12 (rock12 ,1,gray);
+    // Sphere scene_sol (sol ,1,orange2);
     Sphere scene_sphere2 ( O2, 0.6, white_light);
     Sphere scene_sphere3 ( O3, scene_sphere.getSphereRadius()/12, pretty_green);
     Sphere scene_sphere4 ( O4, scene_sphere.getSphereRadius()/12, pretty_green);
@@ -449,11 +482,24 @@ int main(int argc, char const *argv[])
     Triangle scene_Triangle( Vect (3,0,0), Vect (0,3,0) , Vect (0,0,3), orange);
 
     //Plane -1 because the plane it has to be located under the sphere with radius 1
-    // Plane scene_plane (Y,-1,maroon2);
+    Plane scene_plane (Y,-1,green);
 
     //add here all objects on the scene
     
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock1));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock2));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock3));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock4));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock5));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock6));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock7));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock8));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock9));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock10));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock11));
+    scene_objects.push_back(dynamic_cast<Object*> (&scene_rock12));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_sol));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere2));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere3));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere4));
@@ -461,9 +507,9 @@ int main(int argc, char const *argv[])
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere6));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere7));
     scene_objects.push_back(dynamic_cast<Object*> (&scene_sphere8));
-    scene_objects.push_back(dynamic_cast<Object*> (&scene_Triangle));
-    makeCube(Vect(1,1,1), Vect(-1,-1,-1), orange);
-    // scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
+    // scene_objects.push_back(dynamic_cast<Object*> (&scene_Triangle));
+    // makeCube(Vect(1,1,0), Vect(1,1,2), maroon);
+    scene_objects.push_back(dynamic_cast<Object*>(&scene_plane));
 
     int thisone,aa_index;
     double xamnt, yamnt; 
@@ -543,7 +589,7 @@ int main(int argc, char const *argv[])
                     int index_of_closest_object = closestObjectIndex(intersections);            
            
                     //return a color
-                    //if index is negative, ray misses, and then it will be black
+                    //if index is negative, ray misses, and then it will be background
                     if (index_of_closest_object == -1) {
                         //set the background
                         if(FreeImage_GetPixelColor(img, x, y, &color)){
@@ -551,6 +597,10 @@ int main(int argc, char const *argv[])
                             tempGreen[aa_index] = (float) (color.rgbGreen)/255;
                             tempBlue[aa_index] = (float) (color.rgbBlue)/255; 
                         }
+                        //background preto
+                        tempRed[aa_index] = 0;
+                            tempGreen[aa_index] = 0;
+                            tempBlue[aa_index] = 0;
                             // std::cout << (float) color.rgbRed << "_" << (float) color.rgbGreen << "_" << (float) color.rgbBlue << "\n";
                         // cout <<  (float) color.rgbRed/100 << endl;
                        
